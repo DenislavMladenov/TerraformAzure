@@ -58,8 +58,8 @@ resource "azurerm_linux_web_app" "app" {
 }
 # Create the SQL Server
 resource "azurerm_mssql_server" "azmssql" {
-  name                         = "sqlserver-${random_integer.ri.result}"
-  resource_group_name          = azurerm_resource_group.rg.name
+  name                         = var.sql_server_name
+  resource_group_name          = var.resource_group_name
   location                     = var.resource_group_location
   version                      = "12.0"
   administrator_login          = var.sql_admin_login
