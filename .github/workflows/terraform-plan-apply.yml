@@ -18,7 +18,7 @@ jobs:
     steps:
     #checkout the repository to GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     #Login to Azure via Azure CLI
     - name: Login to Azure
@@ -57,7 +57,7 @@ jobs:
     steps:
     #checkout the repository to GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     #Install the latest version of the Terraform CLI
     - name: Install Terraform
@@ -79,4 +79,4 @@ jobs:
 
     #Terraform apply
     - name: Terraform apply
-      run: terraform apply -var-file="values.tfvars" -auto-approve tfplan 
+      run: terraform apply -auto-approve plan.tfplan
