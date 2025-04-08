@@ -13,16 +13,16 @@ provider "azurerm" {
 }
 
 # Generate a random integer to create a globally unique name
-resource "random_integer" "ri" {
-  min = 10000
-  max = 99999
-}
-
-# Create the resource group
-#resource "azurerm_resource_group" "rg" {
- # name     = "TaskBoardRG${random_integer.ri.result}"
- #location = "West Europe"
+#resource "random_integer" "ri" {
+#  min = 10000
+#  max = 99999
 #}
+
+#Create the resource group
+resource "azurerm_resource_group" "rg" {
+ name     = var.resource_group_name
+ location = var.resource_group_location
+}
 
 
 
