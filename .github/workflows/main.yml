@@ -29,6 +29,10 @@ jobs:
     - name: Validate Terraform
       run: terraform validate
 
+    #Terraform Format
+    - name: Terraform Format
+      run: terraform fmt -recursive
+    
     # Checks that all Terraform configuration files adhere to a canocical format
     - name: Terraform format
       run: terraform fmt -check -recursive
