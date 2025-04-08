@@ -3,10 +3,55 @@ on:
     branches:
       - main
 
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 jobs:
-  terraform-test:
-    name: Terraform test
+  terraform-plan:
+    name: Terraform plan
+    runs-on: ubuntu-latest
+    
+
+    steps:
+    #checkout the repository to GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    #Login to Azure via Azure CLI
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    #Install the latest version of the Terraform CLI
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: latest
+
+    #Initialize a new or existing Terraform working directory
+    # Creating initial files, loading any remote state, and downloading any modules, etc.
+    - name: Initialize Terraform
+      run: terraform init
+
+    #Generate an execution plan for Terraform
+    - name: Terraform plan
+      id: plan
+      run: terraform plan -out=plan.tfplan
+
+    #Save plan to artifacts
+    - name: Save plan
+      uses: actions/upload-artifact@v3
+      with:
+        name: plan.tfplan
+        path: plan.tfplan
+
+  terraform-apply:
+    name: Terraform apply
+    needs: terraform-plan
     runs-on: ubuntu-latest
 
     steps:
@@ -25,18 +70,13 @@ jobs:
     - name: Initialize Terraform
       run: terraform init
 
-    #Validate the Terraform code
-    - name: Validate Terraform
-      run: terraform validate
+    #Download saved plan from artifacts
+    - name: Download plan
+      uses: actions/download-artifact@v3
+      with:
+        name: plan.tfplan
+        path: plan.tfplan
 
-    #Terraform Format
-    - name: Terraform Format
-      run: terraform fmt -recursive
-    
-    # Checks that all Terraform configuration files adhere to a canocical format
-    - name: Terraform format
-      run: terraform fmt -check -recursive
-
-    #Validate Terraform files
-    - name: Terraform validate
-      run: terraform validate
+    #Terraform apply
+    - name: Terraform apply
+      run: terraform apply -auto-approve tfplan 
