@@ -28,9 +28,7 @@ jobs:
 
     #Install the latest version of the Terraform CLI
     - name: Install Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: latest
+      uses: actions/upload-artifact@v3.1.2
 
     #Initialize a new or existing Terraform working directory
     # Creating initial files, loading any remote state, and downloading any modules, etc.
