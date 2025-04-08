@@ -79,4 +79,4 @@ jobs:
 
     #Terraform apply
     - name: Terraform apply
-      run: terraform apply -auto-approve tfplan 
+      run: terraform apply -var-file="values.tfvars" -auto-approve tfplan 
