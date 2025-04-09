@@ -5,7 +5,9 @@ terraform {
       version = "4.25.0"
     }
   }
-
+#make sure to create the storage account and container in CLI before running the terraform apply 
+#az storage account create --name taskboardstorage --resource-group StorageRG --location northeurope --sku Standard_LRS --kind StorageV2
+#az storage container create -n taskboardcontainer --account-name taskboardstorage 
   backend "azurerm" {
     resource_group_name  = "StorageRG"
     storage_account_name = "tasboardstorage"
